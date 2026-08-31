@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
+    "appwrite": "^26.2.0",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
