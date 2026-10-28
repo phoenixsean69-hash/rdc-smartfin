@@ -1,5 +1,5 @@
-﻿const { randomUUID } = require("node:crypto");
-const { Client, Databases, ID } = require("node-appwrite");
+const { randomUUID } = require("node:crypto");
+const { Client, TablesDB, ID } = require("node-appwrite");
 const { processFlowSubmission } = require("./flowProcessor");
 
 const allowedJourneys = {
@@ -21,7 +21,7 @@ function getDatabases() {
     .setProject(projectId)
     .setKey(apiKey);
 
-  return new Databases(client);
+  return new TablesDB(client);
 }
 
 async function persistServiceRequest(raw) {
@@ -56,10 +56,10 @@ async function persistServiceRequest(raw) {
 
   const databases = getDatabases();
 
-  const saved = await databases.createDocument({
+  const saved = await databases.createRow({
     databaseId: "smartpay-db",
-    collectionId: "service_requests",
-    documentId: ID.unique(),
+    tableId: "service_requests",
+    rowId: ID.unique(),
     data: {
       requestReference,
       journey,
