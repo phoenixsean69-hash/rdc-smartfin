@@ -128,6 +128,46 @@ if (process.env.NODE_ENV !== "production") {
     }
   });
 }
+if (process.env.NODE_ENV !== "production") {
+  const { getStaffRequests } = require("./staffRequestManager");
+
+  app.get("/api/dev/staff/service-requests", async (req, res) => {
+    const header = req.get("Authorization") || "";
+    const match = /^Bearer ([^\s]+)$/.exec(header);
+
+    if (!match) {
+      return res.status(401).json({
+        error: "Staff authentication required"
+      });
+    }
+
+    try {
+      const result = await getStaffRequests(match[1]);
+
+      return res.status(result.status).json(
+        result.error ? { error: result.error } : result.result
+      );
+    } catch (error) {
+      if (error.code === 401) {
+        return res.status(401).json({
+          error: "Invalid or expired Appwrite session"
+        });
+      }
+
+      if (error.code === 403) {
+        return res.status(403).json({
+          error: "Staff access denied"
+        });
+      }
+
+      console.error("Staff queue failed:", error.code || error.name);
+
+      return res.status(502).json({
+        error: "Unable to load staff requests"
+      });
+    }
+  });
+}
 // Genuine Twilio messages require signature verification.
 // Live WhatsApp processing is deliberately not activated yet.
 app.post("/webhooks/twilio/whatsapp", (req, res) => {
