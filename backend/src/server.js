@@ -89,6 +89,26 @@ if (process.env.NODE_ENV !== "production") {
     );
   });
 }
+if (process.env.NODE_ENV !== "production") {
+  const { persistServiceRequest } = require("./appwriteStore");
+
+  // Local testing only. Not a public resident submission API.
+  app.post("/api/dev/service-requests", async (req, res) => {
+    try {
+      const result = await persistServiceRequest(req.body);
+
+      return res.status(result.status).json(
+        result.error ? { error: result.error } : result.result
+      );
+    } catch (error) {
+      console.error("Service request write failed:", error.code || "unknown");
+
+      return res.status(502).json({
+        error: "Unable to save service request"
+      });
+    }
+  });
+}
 // Genuine Twilio messages require signature verification.
 // Live WhatsApp processing is deliberately not activated yet.
 app.post("/webhooks/twilio/whatsapp", (req, res) => {
