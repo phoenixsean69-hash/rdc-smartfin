@@ -1,0 +1,86 @@
+﻿const { randomUUID } = require("node:crypto");
+const { Client, Databases, ID } = require("node-appwrite");
+const { processFlowSubmission } = require("./flowProcessor");
+
+const allowedJourneys = {
+  complaint: ["category", "location", "description"],
+  application: ["permit_type", "area", "details"]
+};
+
+function getDatabases() {
+  const endpoint = process.env.APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1";
+  const projectId = process.env.APPWRITE_PROJECT_ID;
+  const apiKey = process.env.APPWRITE_API_KEY;
+
+  if (!projectId || !apiKey) {
+    throw new Error("Appwrite server credentials are not configured");
+  }
+
+  const client = new Client()
+    .setEndpoint(endpoint)
+    .setProject(projectId)
+    .setKey(apiKey);
+
+  return new Databases(client);
+}
+
+async function persistServiceRequest(raw) {
+  const validation = processFlowSubmission(raw);
+
+  if (validation.status !== 200) {
+    return validation;
+  }
+
+  const input = typeof raw === "string" ? JSON.parse(raw) : raw;
+  const data = input.flowResponse || input;
+  const journey = data.journey;
+  const selectedFields = allowedJourneys[journey];
+
+  if (!selectedFields) {
+    return {
+      status: 422,
+      error: "This journey is not enabled for database persistence"
+    };
+  }
+
+  const payload = {};
+
+  for (const field of selectedFields) {
+    payload[field] = data[field].trim();
+  }
+
+  const requestReference = "RDC-" + randomUUID();
+  const serviceCategory = journey === "complaint"
+    ? payload.category
+    : payload.permit_type;
+
+  const databases = getDatabases();
+
+  const saved = await databases.createDocument({
+    databaseId: "smartpay-db",
+    collectionId: "service_requests",
+    documentId: ID.unique(),
+    data: {
+      requestReference,
+      journey,
+      status: "PENDING_REVIEW",
+      serviceCategory: serviceCategory.slice(0, 50),
+      payloadJson: JSON.stringify(payload)
+    },
+    permissions: []
+  });
+
+  return {
+    status: 201,
+    result: {
+      accepted: true,
+      simulation: false,
+      requestId: saved.$id,
+      requestReference: saved.requestReference,
+      journey: saved.journey,
+      executionStatus: "SAVED_PENDING_REVIEW"
+    }
+  };
+}
+
+module.exports = { persistServiceRequest };

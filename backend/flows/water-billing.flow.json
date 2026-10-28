@@ -1,0 +1,128 @@
+﻿{
+  "version": "7.3",
+  "screens": [
+    {
+      "id": "SELECT_SERVICE",
+      "title": "Council Bills",
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "service_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Manage your council bills"
+              },
+              {
+                "type": "TextBody",
+                "text": "Select the service you need."
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "service",
+                "label": "Council service",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "water",
+                    "title": "Water bills"
+                  },
+                  {
+                    "id": "rates",
+                    "title": "Property rates"
+                  },
+                  {
+                    "id": "refuse",
+                    "title": "Refuse collection"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "ACCOUNT_REQUEST"
+                  },
+                  "payload": {
+                    "service": "${form.service}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACCOUNT_REQUEST",
+      "title": "Account Enquiry",
+      "terminal": true,
+      "success": true,
+      "data": {
+        "service": {
+          "type": "string",
+          "__example__": "water"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "request_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Your council account"
+              },
+              {
+                "type": "TextBody",
+                "text": "Enter your account reference. We will verify your identity before disclosing any financial information."
+              },
+              {
+                "type": "TextInput",
+                "name": "account_reference",
+                "label": "Account reference",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "request_type",
+                "label": "What do you need?",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "balance",
+                    "title": "View balance"
+                  },
+                  {
+                    "id": "payment",
+                    "title": "Request payment"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Submit request",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "service": "${data.service}",
+                    "account_reference": "${form.account_reference}",
+                    "request_type": "${form.request_type}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

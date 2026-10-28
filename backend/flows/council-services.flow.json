@@ -1,0 +1,831 @@
+{
+  "version": "7.3",
+  "screens": [
+    {
+      "id": "HOME",
+      "title": "RDC SmartFinance",
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "NavigationList",
+            "name": "council_services",
+            "label": "Choose a council service",
+            "list-items": [
+              {
+                "id": "billing",
+                "main-content": {
+                  "title": "Billing & Payments",
+                  "description": "Bills and payments"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "BILL_SERVICES"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "report",
+                "main-content": {
+                  "title": "Report a Problem",
+                  "description": "Service complaints"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "PROBLEM"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "permit",
+                "main-content": {
+                  "title": "Permits & Applications",
+                  "description": "Council permits"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "PERMIT"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "appointment",
+                "main-content": {
+                  "title": "Book an Appointment",
+                  "description": "Council visits"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "APPOINTMENT"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "support",
+                "main-content": {
+                  "title": "Chat with an Officer",
+                  "description": "Human support"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "SUPPORT"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "documents",
+                "main-content": {
+                  "title": "Statements & Receipts",
+                  "description": "Request documents"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "DOCUMENTS"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "updates",
+                "main-content": {
+                  "title": "Council Updates",
+                  "description": "News and alerts"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "UPDATES"
+                  },
+                  "payload": {}
+                }
+              },
+              {
+                "id": "tracking",
+                "main-content": {
+                  "title": "Track a Request",
+                  "description": "Check request status"
+                },
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "TRACKING"
+                  },
+                  "payload": {}
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "BILL_SERVICES",
+      "title": "Council Billing",
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "bill_services_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Manage your bills"
+              },
+              {
+                "type": "TextBody",
+                "text": "Choose the council service you want to enquire about."
+              },
+              {
+                "type": "Dropdown",
+                "name": "service",
+                "label": "Billing service",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "water",
+                    "title": "Water bills"
+                  },
+                  {
+                    "id": "rates",
+                    "title": "Property rates"
+                  },
+                  {
+                    "id": "refuse",
+                    "title": "Refuse collection"
+                  },
+                  {
+                    "id": "market",
+                    "title": "Market and stall fees"
+                  },
+                  {
+                    "id": "land",
+                    "title": "Land and stand charges"
+                  },
+                  {
+                    "id": "licence",
+                    "title": "Business licences"
+                  },
+                  {
+                    "id": "rental",
+                    "title": "Council rentals"
+                  },
+                  {
+                    "id": "levy",
+                    "title": "Other council levies"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "BILL_REQUEST"
+                  },
+                  "payload": {
+                    "service": "${form.service}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "BILL_REQUEST",
+      "title": "Billing Request",
+      "terminal": true,
+      "success": true,
+      "data": {
+        "service": {
+          "type": "string",
+          "__example__": "water"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "bill_request_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Your billing account"
+              },
+              {
+                "type": "TextBody",
+                "text": "Balances and payment instructions require identity verification. This form does not charge you."
+              },
+              {
+                "type": "TextInput",
+                "name": "account_reference",
+                "label": "Account reference",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "request_type",
+                "label": "What do you need?",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "balance",
+                    "title": "Check my balance"
+                  },
+                  {
+                    "id": "payment",
+                    "title": "Request payment instructions"
+                  },
+                  {
+                    "id": "statement",
+                    "title": "Request a statement"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Submit billing request",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "billing",
+                    "service": "${data.service}",
+                    "account_reference": "${form.account_reference}",
+                    "request_type": "${form.request_type}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "PROBLEM",
+      "title": "Report a Problem",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "problem_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Report a council issue"
+              },
+              {
+                "type": "TextBody",
+                "text": "Tell us what needs attention. Submission does not yet create a live council ticket."
+              },
+              {
+                "type": "Dropdown",
+                "name": "category",
+                "label": "Problem category",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "water",
+                    "title": "Water supply"
+                  },
+                  {
+                    "id": "road",
+                    "title": "Roads and drainage"
+                  },
+                  {
+                    "id": "waste",
+                    "title": "Refuse and waste"
+                  },
+                  {
+                    "id": "lighting",
+                    "title": "Street lighting"
+                  },
+                  {
+                    "id": "sanitation",
+                    "title": "Sanitation"
+                  },
+                  {
+                    "id": "other",
+                    "title": "Other or feedback"
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "location",
+                "label": "Area or ward",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "TextArea",
+                "name": "description",
+                "label": "Describe the problem",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Submit report",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "complaint",
+                    "category": "${form.category}",
+                    "location": "${form.location}",
+                    "description": "${form.description}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "PERMIT",
+      "title": "Permit Application",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "permit_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Council applications"
+              },
+              {
+                "type": "TextBody",
+                "text": "Submit an initial enquiry. This is not yet an approved permit application."
+              },
+              {
+                "type": "Dropdown",
+                "name": "permit_type",
+                "label": "Application type",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "business",
+                    "title": "Business licence"
+                  },
+                  {
+                    "id": "building",
+                    "title": "Building permit"
+                  },
+                  {
+                    "id": "trading",
+                    "title": "Trading permit"
+                  },
+                  {
+                    "id": "land",
+                    "title": "Land or stand enquiry"
+                  },
+                  {
+                    "id": "other",
+                    "title": "Other council service"
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "area",
+                "label": "Area or ward",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "TextArea",
+                "name": "details",
+                "label": "Application details",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Submit enquiry",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "application",
+                    "permit_type": "${form.permit_type}",
+                    "area": "${form.area}",
+                    "details": "${form.details}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "APPOINTMENT",
+      "title": "Council Appointment",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "appointment_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Request an appointment"
+              },
+              {
+                "type": "TextBody",
+                "text": "Choose a department and propose a date. Appointment availability is not checked yet."
+              },
+              {
+                "type": "Dropdown",
+                "name": "department",
+                "label": "Department",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "finance",
+                    "title": "Finance and billing"
+                  },
+                  {
+                    "id": "water",
+                    "title": "Water services"
+                  },
+                  {
+                    "id": "planning",
+                    "title": "Planning and permits"
+                  },
+                  {
+                    "id": "housing",
+                    "title": "Housing and land"
+                  },
+                  {
+                    "id": "general",
+                    "title": "General enquiries"
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "preferred_date",
+                "label": "Date YYYY-MM-DD",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "TextArea",
+                "name": "reason",
+                "label": "Reason for visit",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Request appointment",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "appointment",
+                    "department": "${form.department}",
+                    "preferred_date": "${form.preferred_date}",
+                    "reason": "${form.reason}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "SUPPORT",
+      "title": "Council Officer",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "support_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Talk to an officer"
+              },
+              {
+                "type": "TextBody",
+                "text": "Request human assistance. The actual conversation will continue in normal WhatsApp chat when staff messaging is connected."
+              },
+              {
+                "type": "Dropdown",
+                "name": "department",
+                "label": "Support department",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "billing",
+                    "title": "Billing and accounts"
+                  },
+                  {
+                    "id": "water",
+                    "title": "Water services"
+                  },
+                  {
+                    "id": "permits",
+                    "title": "Permits and licensing"
+                  },
+                  {
+                    "id": "general",
+                    "title": "General support"
+                  }
+                ]
+              },
+              {
+                "type": "TextArea",
+                "name": "reason",
+                "label": "How can we help?",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Request human support",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "human_support",
+                    "department": "${form.department}",
+                    "reason": "${form.reason}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "DOCUMENTS",
+      "title": "Council Documents",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "documents_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Request a document"
+              },
+              {
+                "type": "TextBody",
+                "text": "Document access will require verification. Do not enter passwords or PINs."
+              },
+              {
+                "type": "Dropdown",
+                "name": "document_type",
+                "label": "Document type",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "statement",
+                    "title": "Account statement"
+                  },
+                  {
+                    "id": "receipt",
+                    "title": "Payment receipt"
+                  },
+                  {
+                    "id": "bill",
+                    "title": "Copy of bill"
+                  },
+                  {
+                    "id": "other",
+                    "title": "Other document"
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "account_reference",
+                "label": "Account reference",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "TextInput",
+                "name": "document_reference",
+                "label": "Document reference",
+                "required": false,
+                "input-type": "text"
+              },
+              {
+                "type": "Footer",
+                "label": "Request document",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "documents",
+                    "document_type": "${form.document_type}",
+                    "account_reference": "${form.account_reference}",
+                    "document_reference": "${form.document_reference}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "UPDATES",
+      "title": "Council Updates",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "updates_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Council announcements"
+              },
+              {
+                "type": "TextBody",
+                "text": "Choose updates you are interested in. This does not yet activate a subscription."
+              },
+              {
+                "type": "Dropdown",
+                "name": "topic",
+                "label": "Updates category",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "water",
+                    "title": "Water interruptions"
+                  },
+                  {
+                    "id": "waste",
+                    "title": "Waste collection"
+                  },
+                  {
+                    "id": "meetings",
+                    "title": "Council meetings"
+                  },
+                  {
+                    "id": "rates",
+                    "title": "Rates and billing"
+                  },
+                  {
+                    "id": "general",
+                    "title": "General announcements"
+                  }
+                ]
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "preference",
+                "label": "Receive updates?",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "yes",
+                    "title": "Yes, request updates"
+                  },
+                  {
+                    "id": "no",
+                    "title": "No, just enquire"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Submit preference",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "updates",
+                    "topic": "${form.topic}",
+                    "preference": "${form.preference}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "TRACKING",
+      "title": "Track a Request",
+      "terminal": true,
+      "success": true,
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "tracking_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Check request progress"
+              },
+              {
+                "type": "TextBody",
+                "text": "Enter an existing reference. Live status retrieval will require backend integration."
+              },
+              {
+                "type": "Dropdown",
+                "name": "request_category",
+                "label": "Request type",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "complaint",
+                    "title": "Complaint"
+                  },
+                  {
+                    "id": "permit",
+                    "title": "Permit application"
+                  },
+                  {
+                    "id": "appointment",
+                    "title": "Appointment"
+                  },
+                  {
+                    "id": "payment",
+                    "title": "Payment enquiry"
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "request_reference",
+                "label": "Request reference",
+                "required": true,
+                "input-type": "text"
+              },
+              {
+                "type": "Footer",
+                "label": "Request status",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "journey": "tracking",
+                    "request_category": "${form.request_category}",
+                    "request_reference": "${form.request_reference}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

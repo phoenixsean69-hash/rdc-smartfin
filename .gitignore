@@ -1,0 +1,15 @@
+**/node_modules/
+**/dist/
+**/build/
+**/runtime/
+**/.env
+**/.env.*
+!**/.env.example
+**/.next/
+**/.vite/
+**/coverage/
+**/*.log
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
