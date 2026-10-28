@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 import { useAuth } from "./auth/AuthContext";
 import {
@@ -12,6 +12,7 @@ import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import ModulePage from "./pages/ModulePage";
 import SmsAutomationPage from "./pages/SmsAutomationPage";
+import ServiceRequestsPage from "./pages/ServiceRequestsPage";
 
 import type { SectionId } from "./types";
 
@@ -22,6 +23,7 @@ const sectionIds: SectionId[] = [
   "budgets",
   "expenditure",
   "residents",
+  "requests",
   "sms",
   "ai",
   "reports",
@@ -135,6 +137,8 @@ export default function App() {
           {activeSection === "dashboard" ? null : activeSection ===
             "sms" ? (
             <SmsAutomationPage />
+          ) : activeSection === "requests" ? (
+            <ServiceRequestsPage />
           ) : (
             <ModulePage
               section={activeSection}

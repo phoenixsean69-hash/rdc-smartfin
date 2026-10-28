@@ -168,6 +168,71 @@ if (process.env.NODE_ENV !== "production") {
     }
   });
 }
+if (process.env.NODE_ENV !== "production") {
+  const {
+    transitionServiceRequest,
+    getRequestAudit
+  } = require("./staffAssignments");
+
+  function staffToken(req) {
+    const header = req.get("Authorization") || "";
+    const match = /^Bearer ([^\s]+)$/.exec(header);
+    return match ? match[1] : null;
+  }
+
+  function workflowError(res, error) {
+    const code = Number(error.status || error.code);
+    if ([400, 401, 403, 404, 409, 422].includes(code)) {
+      return res.status(code).json({
+        error: error.message || "Workflow request rejected"
+      });
+    }
+
+    console.error("Staff workflow failure:", error.code, error.message);
+    return res.status(502).json({
+      error: "Staff workflow operation failed"
+    });
+  }
+
+  app.post("/api/dev/staff/service-requests/:reference/action", async (req, res) => {
+    const jwt = staffToken(req);
+
+    if (!jwt) {
+      return res.status(401).json({
+        error: "Staff authentication required"
+      });
+    }
+
+    try {
+      const result = await transitionServiceRequest(
+        jwt,
+        req.params.reference,
+        req.body
+      );
+
+      return res.status(result.status).json(result.result);
+    } catch (error) {
+      return workflowError(res, error);
+    }
+  });
+
+  app.get("/api/dev/staff/service-requests/:reference/audit", async (req, res) => {
+    const jwt = staffToken(req);
+
+    if (!jwt) {
+      return res.status(401).json({
+        error: "Staff authentication required"
+      });
+    }
+
+    try {
+      const result = await getRequestAudit(jwt, req.params.reference);
+      return res.status(result.status).json(result.result);
+    } catch (error) {
+      return workflowError(res, error);
+    }
+  });
+}
 // Genuine Twilio messages require signature verification.
 // Live WhatsApp processing is deliberately not activated yet.
 app.post("/webhooks/twilio/whatsapp", (req, res) => {

@@ -56,7 +56,8 @@ async function getStaffRequests(jwt) {
         "requestReference",
         "journey",
         "status",
-        "serviceCategory"
+        "serviceCategory",
+        "assignedDepartmentId"
       ])
     ]
   });
@@ -73,7 +74,8 @@ async function getStaffRequests(jwt) {
         reference: row.requestReference,
         journey: row.journey,
         status: row.status,
-        category: row.serviceCategory
+        category: row.serviceCategory,
+        assignedDepartmentId: row.assignedDepartmentId || null
       }))
     }
   };

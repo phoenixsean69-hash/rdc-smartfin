@@ -1,4 +1,4 @@
-﻿import type {
+import type {
   ComponentType,
 } from "react";
 
@@ -10,6 +10,7 @@ import {
   Gauge,
   Landmark,
   LogOut,
+  ClipboardList,
   MessageSquareText,
   ReceiptText,
   Settings,
@@ -72,6 +73,11 @@ const items: Array<{
     id: "residents",
     label: "Residents",
     icon: Users,
+  },
+  {
+    id: "requests",
+    label: "Service Requests",
+    icon: ClipboardList,
   },
   {
     id: "sms",

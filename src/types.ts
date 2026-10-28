@@ -5,6 +5,7 @@ export type SectionId =
   | "budgets"
   | "expenditure"
   | "residents"
+  | "requests"
   | "sms"
   | "ai"
   | "reports"

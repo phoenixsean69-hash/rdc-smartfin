@@ -18,7 +18,7 @@ import {
 } from "../data/mockData";
 import type { SectionId } from "../types";
 
-type StandardSection = Exclude<SectionId, "dashboard" | "sms">;
+type StandardSection = Exclude<SectionId, "dashboard" | "sms" | "requests">;
 
 const money = new Intl.NumberFormat("en-US", {
   style: "currency",
