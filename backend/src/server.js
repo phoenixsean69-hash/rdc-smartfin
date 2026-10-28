@@ -90,7 +90,7 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 if (process.env.NODE_ENV !== "production") {
-  const { persistServiceRequest } = require("./appwriteStore");
+  const { persistServiceRequest, getServiceRequestStatus } = require("./appwriteStore");
 
   // Local testing only. Not a public resident submission API.
   app.post("/api/dev/service-requests", async (req, res) => {
@@ -105,6 +105,25 @@ if (process.env.NODE_ENV !== "production") {
 
       return res.status(502).json({
         error: "Unable to save service request"
+      });
+    }
+  });
+}
+if (process.env.NODE_ENV !== "production") {
+  const { getServiceRequestStatus } = require("./appwriteStore");
+  // Local development tracking endpoint only.
+  app.get("/api/dev/service-requests/:reference/status", async (req, res) => {
+    try {
+      const result = await getServiceRequestStatus(req.params.reference);
+
+      return res.status(result.status).json(
+        result.error ? { error: result.error } : result.result
+      );
+    } catch (error) {
+      console.error("Service request lookup failed:", { code: error.code, type: error.type, message: error.message });
+
+      return res.status(502).json({
+        error: "Unable to retrieve service request"
       });
     }
   });

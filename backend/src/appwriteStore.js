@@ -1,5 +1,5 @@
 const { randomUUID } = require("node:crypto");
-const { Client, TablesDB, ID } = require("node-appwrite");
+const { Client, TablesDB, ID, Query } = require("node-appwrite");
 const { processFlowSubmission } = require("./flowProcessor");
 
 const allowedJourneys = {
@@ -83,4 +83,44 @@ async function persistServiceRequest(raw) {
   };
 }
 
-module.exports = { persistServiceRequest };
+async function getServiceRequestStatus(reference) {
+  if (typeof reference !== "string" ||
+      !/^RDC-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(reference)) {
+    return { status: 400, error: "Invalid request reference" };
+  }
+
+  const databases = getDatabases();
+
+  const response = await databases.listRows({
+    databaseId: "smartpay-db",
+    tableId: "service_requests",
+    queries: [
+      Query.equal("requestReference", reference),
+      Query.limit(1),
+      Query.select([
+        "requestReference",
+        "journey",
+        "status",
+        "serviceCategory"
+      ])
+    ]
+  });
+
+  const row = response.rows[0];
+
+  if (!row) {
+    return { status: 404, error: "Request not found" };
+  }
+
+  return {
+    status: 200,
+    result: {
+      requestReference: row.requestReference,
+      journey: row.journey,
+      status: row.status,
+      serviceCategory: row.serviceCategory
+    }
+  };
+}
+
+module.exports = { persistServiceRequest, getServiceRequestStatus };
